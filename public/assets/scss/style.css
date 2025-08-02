@@ -11974,8 +11974,15 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+@font-face {
+  font-family: "IRANSansWeb";
+  src: url("../fonts/IRANSansWeb.woff2") format("woff2"), url("../fonts/IRANSansWeb.woff") format("woff"), url("../fonts/IRANSansWeb(FaNum).ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 body {
-  font-family: "IRANSans", sans-serif;
+  font-family: "IRANSansWeb", sans-serif;
   background-color: #F8F7F3;
   direction: rtl;
 }
