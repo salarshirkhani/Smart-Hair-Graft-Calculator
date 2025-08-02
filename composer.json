@@ -1,0 +1,17 @@
+{
+    "name": "tec/estimator",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Core\\": "core/",
+            "Config\\": "config/"
+        }
+    },
+    "authors": [
+        {
+            "name": "salarshirkhani",
+            "email": "salarshirkhany16@gmail.com"
+        }
+    ],
+    "require": {}
+}

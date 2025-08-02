@@ -1,0 +1,16 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap";
+
+$primary-color: #ff6600;
+$border-radius: 10px;
+$bg-default: #f5f5f5;
+
+body {
+  font-family: 'IRANSans', sans-serif;
+  background-color: #F8F7F3;
+  direction: rtl;
+}
+.form-select{
+  direction: rtl;
+  background-position: left 0.75rem center !important;
+  color: #5c5d5e;
+}

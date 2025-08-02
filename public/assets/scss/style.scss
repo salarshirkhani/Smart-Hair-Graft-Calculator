@@ -1,0 +1,612 @@
+@use 'base';
+$primary-color: #ff6600;
+$border-radius: 10px;
+$bg-default: #f5f5f5;
+.step {
+  display: none;
+
+  &.active {
+    display: block;
+  }
+}
+
+.bg-or{
+  background-color: #ff6600;  
+}
+.btn{
+    width: 198px;
+    height: 48px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    background-color: #FF5A00 !important;
+    border: 1px solid #FF5A00 !important;
+    color: var(--Grayscale-4, #F4F6F5);
+    text-align: center;
+    font-family: inherit;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border-radius: 18px;
+}
+
+select{
+    background-color: #dadbdd;
+}
+
+.btn-prev{
+    clear: both;
+    display: block;
+    margin-top: 10px;
+    background-color: #fff !important;
+    color: #FF5A00;
+    border: none !important;
+    &:hover {
+        cursor: pointer;
+        color:#000000;
+    }
+}
+
+.centrilized {
+    display: flex !important;
+    gap: 16px;
+    flex-direction: column-reverse;
+}
+
+        .toggle-group {
+            display: flex;
+            gap: 20px;
+            direction: rtl;
+            margin:20px 0px;
+        }
+
+        .toggle-option {
+            cursor: pointer;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px 16px;
+            transition: all 0.3s ease;
+            background: #f8f8f8;
+
+            span {
+                font-weight: bold;
+                color: #555;
+            }
+
+            input:checked + span,
+            &.active {
+                border-color: #ff6600;
+                background-color: #fff3e6;
+                color: #ff6600;
+            }
+        }
+
+#step-container{
+    border-radius: 10px;
+    box-shadow: 0 0 15px #00000021;
+    margin: 0 auto;
+    padding:10px;
+    background-color: #ffffff !important;
+    outline: none !important;
+    max-width: 700px;
+
+    #step-0{
+    
+        h3{
+            line-height: 38px;
+            text-align: center;
+            padding-bottom: 23px;
+            margin-bottom: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 1px solid #CDCFCE;
+        }
+
+        .description {
+            color: #333;
+            font-family: inherit;
+            font-size: 16px;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 24px;
+            direction: rtl;
+            letter-spacing: -0.02em;
+        }
+        .form-question {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #2b2b2b;
+            margin-bottom: 0.75em;
+            padding: 0.5em 0;
+        }
+        .header-box {
+            height: 300px;
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 20px;
+            background-position: center;
+            background-size: cover;
+            position: relative;
+            background-repeat: no-repeat;
+            background-image: url(https://padra.com/wp-content/uploads/2025/04/Slide-1-C-min.png);
+        }
+    }
+
+    #step-1{
+        padding:10px;
+        label{
+            text-align: right;
+            font-size: 15px;
+        }
+        .g-box{
+            margin: 31px auto;
+            justify-content: space-between !important;
+            margin-bottom: 65px;
+            padding: 20px 50px 50px 50px !important;
+            border-bottom: 1px solid #CDCFCE;
+        }
+
+        .a-box{
+            margin: 31px auto;
+            justify-content: space-between !important;
+            margin-bottom: 65px;
+            padding: 14px 0px 25px !important;
+        }
+
+        .gender-option {
+            display: inline-block;
+            margin: 0 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+
+            // input مخفی ولی انتخاب‌پذیر
+            .hidden-radio {
+                display: none;
+            }
+
+            .option-box {
+                border: 1px solid #ddd;
+                border-radius: $border-radius;
+                background: $bg-default;
+                padding: 10px 25px;
+                display: flex;
+                align-items: center;
+                gap: 30px;
+                transition: all 0.3s ease;
+
+                img {
+                width: 60px;
+                height: 60px;
+                transition: all 0.3s ease;
+                }
+
+                span {
+                color: #555;
+                font-weight: 700;
+                font-size: 17px;
+                transition: all 0.3s ease;
+                }
+            }
+
+        // SELECTED
+            .hidden-radio:checked + .option-box {
+                border-color: $primary-color;
+
+                span {
+                color: $primary-color;
+                font-weight: bold;
+                }
+
+            }
+        }
+
+        .age-option {
+            display: inline-block;
+            margin: 0 10px;
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+
+            // input مخفی ولی انتخاب‌پذیر
+            .hidden-radio {
+                display: none;
+            }
+
+            .option-box {
+
+                border: 1px solid #000000;
+                border-radius: 10px;
+                background: #ffffff;
+                padding: 16px 18px;
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                transition: all 0.3s ease;
+
+                img {
+                width: 60px;
+                height: 60px;
+                transition: all 0.3s ease;
+                }
+
+                span {
+                color: #1e1e1e;
+                font-weight: 700;
+                font-size: 17px;
+                transition: all 0.3s ease;
+                }
+            }
+
+        // SELECTED
+            .hidden-radio:checked + .option-box {
+                border-color: $primary-color;
+                background: $primary-color;
+                span {
+                color: #ffffff;
+                font-weight: bold;
+                }
+
+            }
+        }
+    }
+
+    #step-2{
+        padding:10px;
+        label{
+            text-align: right;
+            font-size: 15px;
+        }
+          .pattern-option {
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+
+            &:hover {
+            background-color: #f8f9fa;
+            }
+
+            &.selected {
+            border-color: #ffc107;
+            background-color: #fff8e1;
+            }
+        }
+
+        .pattern-img {
+            max-height: 130px;
+            object-fit: contain;
+            transition: filter 0.3s ease;
+        }
+                
+    }
+
+    #step-3{
+        padding:10px;
+        label{
+            text-align: right;
+            font-size: 15px;
+            border-bottom: 1px solid #CDCFCE;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .container-image {
+            padding: 18px 28px;
+            fill: var(--Grayscale-4, #FFF);
+            box-shadow: 0px 0px 15px #00000015;
+            border-radius: 0 0 50px 50px;
+            margin-bottom: 25px;
+        }
+        .subheading0-image {
+            color: var(--Grayscale-2, #121212);
+            font-family: inherit;
+            font-size: 18px;
+            font-style: normal;
+            font-weight: 400;
+            line-height: normal;
+            margin:20px 0px;
+            text-align: start;
+            direction: rtl;
+        }
+        .description-image {
+            margin-bottom: 20px;
+            text-align: right;
+            line-height: 1.8;
+
+            .privacy-note{
+                margin-top: 1.5em;
+                background: #ff5a0014;
+                padding: 1em;
+                border-radius: 8px;
+                font-size: 0.95rem;
+                color: #333;
+            }
+        }
+        .angles {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            .angle {
+                width: 143px;
+                border-radius: 30px;
+                overflow: hidden;
+                img {
+                    border: none;
+                    border-radius: 0;
+                    box-shadow: none;
+                    height: auto;
+                    max-width: 100%;
+                }
+            }
+        }
+        .upload-box {
+            background: rgba(223, 240, 255, 0.13);
+            border: 1px dashed $primary-color;
+            border-radius: 8px;
+            color: #555;
+            display: block;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.2s ease;
+            width: 100%;
+            cursor: pointer;
+
+            span {
+                display: block;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 8px;
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+
+            .progress {
+                height: 4px;
+                margin-top: 8px;
+                background: #eee;
+
+                .progress-bar {
+                background-color: $primary-color;
+                }
+            }
+
+            .thumbnail {
+                width: 100%;
+                height: auto;
+                margin-top: 10px;
+                border-radius: 6px;
+            }
+
+            // افکت hover
+            &:hover {
+                background: lighten($primary-color, 45%);
+                border-color: darken($primary-color, 10%);
+            }
+        }   
+        .upload-success {
+                border: 1px solid #28a745; 
+                background: #c2e5cc;
+        }           
+    }
+
+    #step-4{
+        padding:10px;
+        label{
+            text-align: right;
+            font-size: 15px;
+        }
+        input{
+            padding: 10px;
+            border: 1px solid #ff6600;
+            direction: rtl;
+            border-radius:5px;
+            width:100%;
+        }
+        select{
+            margin:5px 0px;
+        }
+        #medical-fields{
+            margin: 24px 4px;
+            gap:20px;
+        }
+        #meds-fields{
+            margin: 24px 4px;
+            gap:20px;
+        }
+    }
+
+    #step-5{
+        padding:10px;
+        label{
+            text-align: right;
+            font-size: 15px;
+        }
+
+        input{
+            padding: 10px;
+            border: 1px solid #ff6600;
+            direction: rtl;
+            border-radius:5px;
+            margin:10px 0px;
+        }
+        select{
+            margin:5px 0px;
+        }
+
+    }
+    
+}
+#step-container {
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00000021;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #ffffff !important;
+  outline: none !important;
+  max-width: 700px;
+
+  // --- استایل داخلی Steps شما (0 تا 5) بدون تغییر اینجا می‌مونه ---
+
+  // ---------- ریسپانسیو ----------
+  @media (max-width: 768px) {
+    max-width: 95%;
+    padding: 10px;
+
+    // جنسیت و سن دو ستونه تو تبلت
+    #step-1 {
+      .g-box,
+      .a-box {
+        flex-wrap: wrap;
+        justify-content: center !important;
+        gap: 15px;
+        padding: 0 !important;
+      }
+
+      .gender-option,
+      .age-option {
+        width: 45%;
+        margin-bottom: 10px;
+
+        .option-box {
+          justify-content: center;
+          width: 100%;
+        }
+      }
+    }
+
+    // الگوهای ریزش تو تبلت دو ستونه
+    #step-2 {
+      .pattern-option {
+        width: 48%;
+        margin-bottom: 15px;
+      }
+    }
+
+    // آپلود عکس‌ها دو ستونه تو تبلت
+    #step-3 {
+      .angles {
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .angle {
+          width: 48%;
+        }
+      }
+
+      #upload-zones {
+        .col-6,
+        .col-md-3 {
+          width: 50%;
+          max-width: 50%;
+        }
+      }
+    }
+
+    // toggle-group دو ستونه
+    .toggle-group {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+
+      .toggle-option {
+        width: 48%;
+        text-align: center;
+      }
+    }
+
+    // فرم پایانی (نام، شهر و ... دوتایی)
+    #step-5 {
+      input,
+      select {
+        width: 48%;
+        margin-bottom: 10px;
+      }
+
+      input[name="mobile"] {
+        width: 100%;
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    max-width: 100%;
+    padding: 8px;
+
+    // جنسیت و سن ستونی تو موبایل
+    #step-1 {
+      .g-box,
+      .a-box {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        margin: 20px 0 !important;
+        padding: 0 !important;
+      }
+
+      .gender-option,
+      .age-option {
+        width: 100%;
+        margin: 0 !important;
+
+        .option-box {
+          justify-content: center;
+          width: 100%;
+        }
+      }
+    }
+
+    // آپلود عکس‌ها ستونی تو موبایل
+    #step-3 {
+      .angles {
+        flex-wrap: wrap;
+        gap: 8px;
+
+        .angle {
+          width: 48%;
+        }
+      }
+
+      #upload-zones {
+        .col-6,
+        .col-md-3 {
+          width: 100%;
+          max-width: 100%;
+        }
+      }
+    }
+
+    // دکمه‌ها فول‌عرض
+    .btn,
+    .btn-prev {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    // toggle-group ستونی
+    .toggle-group {
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+
+      .toggle-option {
+        width: 100%;
+        text-align: center;
+      }
+    }
+
+    // فرم پایانی ستونی
+    #step-5 {
+      input,
+      select {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}

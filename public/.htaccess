@@ -1,0 +1,9 @@
+Options -Indexes
+RewriteEngine On
+
+# اگر فایل یا فولدر واقعی نبود
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# همه درخواست‌ها بره به index.php
+RewriteRule ^ index.php [QSA,L]
