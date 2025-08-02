@@ -13,5 +13,15 @@
             "email": "salarshirkhany16@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "openai-php/client": "^0.14.0",
+        "symfony/http-client": "^7.3",
+        "nyholm/psr7": "^1.8",
+        "vlucas/phpdotenv": "^5.6"
+    },
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    }
 }
