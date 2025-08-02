@@ -32,5 +32,7 @@ $router->post('/step2', 'EstimatorController@handleStep2');
 $router->post('/step3', 'EstimatorController@handleStep3');
 $router->post('/step4', 'EstimatorController@handleStep4');
 $router->post('/step5', 'EstimatorController@handleStep5');
+$router->get('/result/{user_id}', 'EstimatorController@apiResult');
+
 
 $router->dispatch();

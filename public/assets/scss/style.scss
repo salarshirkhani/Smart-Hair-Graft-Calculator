@@ -438,6 +438,76 @@ select{
         select{
             margin:5px 0px;
         }
+    }
+
+    #step-6 {
+      padding: 20px;
+      text-align: right;
+
+      .result-box {
+        background: #fff3e6;
+        border: 1px solid #ff6600;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 15px;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .user-summary {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 10px 15px;
+
+        h5 {
+          color: #ff6600;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+
+        ul {
+          padding: 0;
+          list-style: none;
+
+          li {
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #444;
+          }
+        }
+      }
+      .ai-result-container {
+        background: #fff;
+        border: 1px solid #ff6600;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+        .method-text {
+          color: #ff6600;
+          font-weight: bold;
+        }
+
+        .analysis-text {
+          margin-top: 10px;
+          line-height: 1.8;
+          color: #333;
+          font-size: 15px;
+        }
+
+        .graft-count-box {
+          margin-top: 15px;
+          background: #fff3e6;
+          border: 2px solid #ff6600;
+          border-radius: 10px;
+          padding: 10px;
+          text-align: center;
+          font-size: 16px;
+          font-weight: bold;
+          color: #333;
+        }
+      }
 
     }
     

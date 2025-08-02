@@ -110,7 +110,7 @@ class EstimatorController extends Controller {
 
         $userId = $_POST['user_id'] ?? '';
         if (!$userId) {
-            echo json_encode(['success' => false, 'message' => 'User ID لازم است']);
+            echo json_encode(['success' => false, 'message' => 'User ID لا زم است']);
             return;
         }
 
@@ -170,20 +170,53 @@ class EstimatorController extends Controller {
 
         // Build prompt and call AI
         $prompt = $this->buildPrompt($user, $userMeta, $pics);
+
         $aiResult = $this->callAI($prompt);
 
-        // Store diagnosis (FIT only)
+        // پاک‌سازی کامل بک‌تیک‌ها و Markdown
+        $cleanJson = preg_replace('/```(json)?/i', '', $aiResult);
+        $cleanJson = trim($cleanJson);
+
+        $parsed = json_decode($cleanJson, true);
+
+        if ($parsed) {
+            $method = $parsed['method'] ?? 'FIT';
+            $graftCount = $parsed['graft_count'] ?? 2500;
+            $analysis = $parsed['analysis'] ?? '';
+        } else {
+            $method = 'FIT';
+            $graftCount = $this->extractGraftCount($cleanJson);
+            $analysis = $cleanJson;
+        }
+
         $diagnosis = new Diagnosis();
         $diagnosis->create([
             'user_id'    => $userId,
-            'method'     => 'FIT',
-            'graft_count'=> $this->extractGraftCount($aiResult),
+            'method'     => $method,
+            'graft_count'=> $graftCount,
             'branch'     => 'تهران',
-            'ai_result'  => $aiResult
+            'ai_result'  => $analysis
         ]);
 
-        echo json_encode(['success' => true, 'ai_result' => $aiResult]);
-    }
+        echo json_encode([
+            'success' => true,
+            'ai_result' => json_encode([
+                'method' => $method,
+                'graft_count' => $graftCount,
+                'analysis' => $analysis
+            ]),
+            'user' => [
+                'first_name' => $firstName,
+                'last_name'  => $lastName,
+                'gender'     => $user['gender'],
+                'age'        => $user['age'],
+                'city'       => $city,
+                'state'      => $state
+            ]
+        ]);
+
+
+     }
 
     // --- Helpers ---
 
@@ -192,21 +225,31 @@ class EstimatorController extends Controller {
         $photoUrls = array_map(fn($p) => "$protocol://{$_SERVER['HTTP_HOST']}{$p['file']}", $pics);
 
         return "
-        You are a professional hair transplant consultant.
-        Always recommend FIT technique only.
+        شما یک پزشک متخصص کاشت مو هستید.
+        وظیفه شما ارائه مشاوره دقیق و حرفه‌ای برای کاشت مو است.
 
-        Patient Info:
-        - Gender: {$user['gender']}
-        - Age: {$user['age']}
-        - Hair Loss Pattern: {$meta['loss_pattern']}
-        - Main Concern: {$meta['concern']}
-        - Medical Conditions: {$meta['scalp_conditions']} / {$meta['other_conditions']}
-        - Medications: {$meta['meds_list']}
-        - Photos: ".implode(', ', $photoUrls)."
+        اطلاعات بیمار:
+        - جنسیت: {$user['gender']}
+        - سن: {$user['age']}
+        - الگوی ریزش مو: " . ($meta['loss_pattern'] ?? 'نامشخص') . "
+        - دغدغه اصلی: " . ($meta['concern'] ?? 'نامشخص') . "
+        - بیماری‌های پوستی: " . ($meta['scalp_conditions'] ?? 'ندارد') . "
+        - بیماری‌های دیگر: " . ($meta['other_conditions'] ?? 'ندارد') . "
+        - داروهای مصرفی: " . ($meta['meds_list'] ?? 'ندارد') . "
+        - تصاویر: " . implode(', ', $photoUrls) . "
 
-        Respond in Persian, short and professional.
+        لطفاً فقط روش FIT را پیشنهاد دهید و خروجی را به فرمت JSON برگردانید.
+
+        ساختار خروجی:
+        {
+            \"method\": \"FIT\",
+            \"graft_count\": [عدد تقریبی بین 1000 تا 6000],
+            \"analysis\": \"توضیح پزشکی کوتاه و تخصصی در مورد شرایط بیمار و علت انتخاب FIT\"
+        }
         ";
     }
+
+
 
     private function callAI($prompt) {
         $client = OpenAIService::client();
@@ -218,12 +261,43 @@ class EstimatorController extends Controller {
             ]
         ]);
 
-        return $response->choices[0]->message->content ?? '';
+        return $response->choices[0]->message->content 
+            ?? $response->choices[0]->text 
+            ?? '';
     }
-
 
     private function extractGraftCount($aiText) {
         if (preg_match('/(\\d{3,4})/', $aiText, $m)) return (int)$m[1];
         return 2500; // fallback
     }
+
+    public function apiResult($userId) {
+        header('Content-Type: application/json');
+
+        $diagnosisModel = new Diagnosis();
+        $result = $diagnosisModel->findByUser($userId);
+
+        if (!$result) {
+            echo json_encode(['success' => false, 'message' => 'نتیجه‌ای یافت نشد']);
+            return;
+        }
+
+        $userModel = new User();
+        $user = $userModel->findById($userId);
+
+        $metaModel = new UserMeta();
+        $meta = $metaModel->getAllMetaForUser($userId);
+
+        $picsModel = new hair_pic();
+        $pics = $picsModel->getPicsByUser($userId);
+
+        echo json_encode([
+            'success'  => true,
+            'user'     => $user,
+            'meta'     => $meta,
+            'photos'   => $pics,
+            'diagnosis'=> $result
+        ]);
+    }
+
 }

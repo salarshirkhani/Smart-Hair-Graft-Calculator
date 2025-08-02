@@ -282,9 +282,15 @@
 
         <!-- Step 6: نمایش نتیجه -->
         <div id="step-6" class="step d-none">
-            <h3>نتیجه</h3>
-            <div id="result"></div>
-            <button id="download-pdf">دانلود PDF</button>
+            <h3>نتیجه مشاوره</h3>
+            <div id="ai-result-box" class="result-box"></div>
+
+            <div class="user-summary mt-4">
+                <h5>خلاصه اطلاعات شما</h5>
+                <ul id="user-summary-list"></ul>
+            </div>
+            <button id="reset-form" class="btn btn-danger mt-3">شروع مجدد</button>
+            <button id="download-pdf" class="btn btn-primary mt-3">دانلود PDF</button>
         </div>
 
     </div>

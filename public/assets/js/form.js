@@ -28,6 +28,11 @@ $(document).ready(function () {
                 goToStep(1);
             }
         }
+
+        if (step === 6) {
+            // وقتی به نتیجه رسیدیم → پاک‌سازی مرحله ذخیره‌شده
+            localStorage.removeItem('currentStep');
+        }
     }
 
     // ======== آپدیت نوار پیشرفت ========
@@ -243,24 +248,82 @@ $(document).ready(function () {
     });
 
     // ======== مرحله ۵: اطلاعات تماس ========
-    $('#form-step-5').submit(function (e) {
-        e.preventDefault();
-        const data = $(this).serialize() + '&user_id=' + userId;
+    console.log("Binding form-step-5");
+$(document).on('submit', '#form-step-5', function (e) {
+    e.preventDefault();
+    console.log("Step 5 submitted ✅");
 
-        $.post('/step5', data, function (response) {
-            if (response.success) {
-                goToStep(6);
-                $('#result').html('<p>پروفایل شما ساخته شد و اطلاعات ذخیره شد!</p>');
-            } else {
-                alert(response.message || 'خطا در مرحله ۵');
+    let userId = localStorage.getItem('userId'); // ← اضافه شد
+    if (!userId) {
+        alert('کاربر شناسایی نشد، لطفاً دوباره مراحل را شروع کنید');
+        return;
+    }
+
+    let data = $(this).serialize() + '&user_id=' + userId;
+
+    $.post('/step5', data, function (response) {
+        console.log("DEBUG /step5:", response); 
+        if (response.success) {
+            let method = '';
+            let graftCount = '';
+            let analysis = '';
+            let isJson = false;
+
+            try {
+                const parsed = JSON.parse(response.ai_result);
+                method = parsed.method || 'FIT';
+                graftCount = parsed.graft_count || '';
+                analysis = parsed.analysis || '';
+                isJson = true;
+            } catch (e) {
+                // fallback اگر JSON نبود
+                analysis = response.ai_result;
+                method = 'FIT';
             }
-        }, 'json');
-    });
+
+            $('#ai-result-box').html(`
+                <div class="ai-result-container">
+                    <h4>روش پیشنهادی: <span class="method-text">${method}</span></h4>
+                    <p class="analysis-text">${analysis}</p>
+                    ${graftCount ? `
+                        <div class="graft-count-box">
+                            <strong>تخمین تعداد گرافت:</strong> ${graftCount} گرافت
+                        </div>` : ''}
+                </div>
+            `);
+
+            let summary = `
+                <li><strong>نام:</strong> ${response.user.first_name} ${response.user.last_name}</li>
+                <li><strong>جنسیت:</strong> ${response.user.gender}</li>
+                <li><strong>سن:</strong> ${response.user.age}</li>
+                <li><strong>شهر:</strong> ${response.user.city}, ${response.user.state}</li>
+            `;
+            $('#user-summary-list').html(summary);
+
+            goToStep(6);
+        } else {
+            alert(response.message);
+        }
+    }, 'json');
+
+});
+
 
     // ======== دانلود PDF و ریست فرم ========
     $('#download-pdf').click(function () {
-        alert('دانلود PDF بعداً پیاده‌سازی می‌شود.');
-        localStorage.clear();
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        const resultText = $('#ai-result-box').text();
+        const userSummary = $('#user-summary-list').text();
+
+        doc.setFont("Helvetica");
+        doc.text("نتیجه مشاوره کاشت مو", 10, 10);
+        doc.text(resultText, 10, 20);
+        doc.text("خلاصه اطلاعات:", 10, 50);
+        doc.text(userSummary, 10, 60);
+
+        doc.save("diagnosis.pdf");
     });
 
     // ======== دکمه برگشت به مرحله قبل ========
@@ -269,4 +332,12 @@ $(document).ready(function () {
         const prev = Math.max(1, current - 1);
         goToStep(prev);
     });
+
+    $(document).on('click', '#reset-form', function () {
+            if (confirm('آیا مطمئن هستید که می‌خواهید فرم را از ابتدا شروع کنید؟')) {
+                localStorage.clear(); // پاک کردن همه داده‌های ذخیره‌شده
+                window.location.reload(); // رفرش به Step 0
+            }
+    });
+
 });
