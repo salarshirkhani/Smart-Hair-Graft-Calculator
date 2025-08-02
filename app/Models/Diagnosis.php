@@ -11,9 +11,10 @@ class Diagnosis extends Model {
         $method = $this->escape($data['method']);
         $graftcount = (int)$data['graft_count'];
         $branch = $this->escape($data['branch']);
+        $aiResult = $this->escape($data['ai_result']);
 
-        $sql = "INSERT INTO {$this->table} (user_id, method, graft_count, branch)
-                VALUES ($userId, '$method', $graftcount, '$branch')";
+        $sql = "INSERT INTO {$this->table} (user_id, method, graft_count, branch, ai_result)
+                VALUES ($userId, '$method', $graftcount, '$branch', '$aiResult')";
         return $this->query($sql);
     }
 

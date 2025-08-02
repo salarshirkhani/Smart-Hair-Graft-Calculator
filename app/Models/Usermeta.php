@@ -18,12 +18,14 @@ class UserMeta extends Model {
 
     public function getAllMetaForUser($userId) {
         $userId = (int)$userId;
-        $sql = "SELECT meta_key, meta_value FROM user_meta WHERE user_id = $userId";
+        $sql = "SELECT meta_key, meta_value FROM {$this->table} WHERE user_id = $userId";
         $result = $this->query($sql);
+
         $meta = [];
         while ($row = $result->fetch_assoc()) {
             $meta[$row['meta_key']] = $row['meta_value'];
         }
         return $meta;
     }
+
 }

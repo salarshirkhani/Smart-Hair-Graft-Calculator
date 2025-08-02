@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\UserMeta;
 use App\Models\hair_pic;
 use App\Models\Diagnosis;
+use Core\OpenAIService;
 
 class EstimatorController extends Controller {
 
@@ -187,7 +188,8 @@ class EstimatorController extends Controller {
     // --- Helpers ---
 
     private function buildPrompt($user, $meta, $pics) {
-        $photoUrls = array_map(fn($p) => $_SERVER['HTTP_HOST'].$p['file'], $pics);
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+        $photoUrls = array_map(fn($p) => "$protocol://{$_SERVER['HTTP_HOST']}{$p['file']}", $pics);
 
         return "
         You are a professional hair transplant consultant.
@@ -207,16 +209,18 @@ class EstimatorController extends Controller {
     }
 
     private function callAI($prompt) {
-        $client = \OpenAI::client(getenv('OPENAI_API_KEY'));
-        $res = $client->chat()->create([
+        $client = OpenAIService::client();
+        $response = $client->chat()->create([
             'model' => 'gpt-4o-mini',
             'messages' => [
-                ['role' => 'system', 'content' => 'You are an expert hair transplant consultant.'],
-                ['role' => 'user', 'content' => $prompt],
-            ],
+                ['role' => 'system', 'content' => 'You are a medical hair transplant assistant specialized in FIT technique.'],
+                ['role' => 'user', 'content' => $prompt] 
+            ]
         ]);
-        return $res['choices'][0]['message']['content'];
+
+        return $response->choices[0]->message->content ?? '';
     }
+
 
     private function extractGraftCount($aiText) {
         if (preg_match('/(\\d{3,4})/', $aiText, $m)) return (int)$m[1];

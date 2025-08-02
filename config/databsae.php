@@ -1,11 +1,24 @@
 <?php
-$host   = "localhost";
-$user   = "root";
-$pass   = "";
-$dbname = "hair_estimator";
+namespace Config;
 
-$conn = new mysqli($host, $user, $pass, $dbname);
-if ($conn->connect_error) {
-    die("Database connection failed: " . $conn->connect_error);
+use mysqli;
+
+class Database {
+    protected static $connection;
+
+    public static function getConnection() {
+        if (!self::$connection) {
+            self::$connection = new mysqli(
+                getenv('DB_HOST'),
+                getenv('DB_USER'),
+                getenv('DB_PASS'),
+                getenv('DB_NAME')
+            );
+
+            if (self::$connection->connect_error) {
+                die('Database connection failed: ' . self::$connection->connect_error);
+            }
+        }
+        return self::$connection;
+    }
 }
-$conn->set_charset("utf8mb4");
