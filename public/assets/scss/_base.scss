@@ -24,3 +24,21 @@ body {
   background-position: left 0.75rem center !important;
   color: #5c5d5e;
 }
+.loader-overlay {
+  position: fixed;       // روی کل ویوپورت پِوش می‌کند
+  inset: 0;              // top:0; right:0; bottom:0; left:0;
+  background: rgba(255,255,255);
+  display: flex;         // فلکس برای وسط‌چین
+  align-items: center;   // عمودی وسط
+  justify-content: center; // افقی وسط
+  z-index: 9999;         // بالاتر از همه
+}
+.spinner {
+  width: 40px; height: 40px;
+  border: 4px solid #eee;
+  border-top: 4px solid $primary-color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

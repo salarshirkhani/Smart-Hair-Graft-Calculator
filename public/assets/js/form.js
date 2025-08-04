@@ -11,24 +11,45 @@ $(document).ready(function () {
     };
 
     // ==================== تغییر عکس‌های الگوی ریزش مو (Step 2) ====================
-    function updateLossPatternImages(gender) {
-        $('#form-step-2 .pattern-option img').each(function (index) {
-            const i = index + 1;
-            if (gender === 'female') {
-                $(this).attr('src', `/assets/img/wg${i}.png`);
-                $(this).attr('data-colored', `/assets/img/w${i}.png`);
-                $(this).attr('data-gray', `/assets/img/wg${i}.png`);
-            } else {
-                $(this).attr('src', `/assets/img/${i}.webp`);
-                $(this).attr('data-colored', `/assets/img/ol${i}.png`);
-                $(this).attr('data-gray', `/assets/img/${i}.webp`);
-            }
+    function initializeStep2PatternImages(gender) {
+        const isF = gender === 'female';
+        $('#form-step-2 .pattern-option img').each((idx, img) => {
+            const i = idx + 1;
+            // مسیر رنگی (یک‌بار بارگذاری میشه)
+            img.src = isF
+            ? `/assets/img/w${i}.png`
+            : `/assets/img/ol${i}.png`;
         });
-
-        // ❗ بعد از آپدیت عکس‌ها، انتخاب قبلی رو ریست کن
-        $('input[name="loss_pattern"]').prop('checked', false);
-        $('.pattern-option').removeClass('selected');
     }
+    const preloadImages = () => {
+    const urls = [];
+    for (let i = 1; i <= 6; i++) {
+        urls.push(`/assets/img/${i}.webp`);
+        urls.push(`/assets/img/w${i}.png`);
+    }
+    urls.forEach(u => (new Image().src = u));
+    };
+    preloadImages();
+
+    // 2️⃣ تابع آپدیت Step2 (فقط وقتی واردش می‌شوید)
+    function updateLossPatternImages(gender) {
+    const isF = gender === 'female';
+    $('#form-step-2 .pattern-option img').each(function (idx) {
+        const i = idx + 1;
+        const gray = isF ? `/assets/img/wg${i}.png` : `/assets/img/${i}.webp`;
+        $(this).data('gray', gray).data('colored', col)[0].src = gray;
+    });
+
+    // ریست انتخاب
+    $('input[name="loss_pattern"]').prop('checked', false);
+    $('.pattern-option').removeClass('selected');
+    }
+
+    $('#form-step-2').on('click', '.pattern-option', function () {
+    $('.pattern-option').removeClass('selected');
+    $(this).addClass('selected');
+    $('input[name="loss_pattern"]', this).prop('checked', true);
+    });
 
 
     // ==================== تغییر عکس‌های توضیحی آپلود (Step 3) ====================
@@ -81,10 +102,46 @@ $(document).ready(function () {
                 loadUploadedThumbnails();
                 updateUploadDescriptionImages(gender);
             } else {
-                alert('جنسیت مشخص نیست. لطفاً مرحله ۱ را کامل کنید.');
+                toastr.error('جنسیت مشخص نیست. لطفاً مرحله ۱ را کامل کنید.');
                 goToStep(1);
             }
         }
+
+
+    if (step === 2) {
+        const gender = localStorage.getItem('gender') || 'male';
+        const $step2    = $('#step-2');
+        const $loader   = $('#step2-loader');
+        const $content  = $step2.find('.step-content');
+
+        // ۱) نشان دادن کانتینر Step2 و لودر، پنهان کردن محتوای داخل
+        $step2.show().addClass('active');
+        $content.hide();
+        $loader.show();
+
+        // ۲) یک‌بار ست کردن src تصاویر رنگی
+        $step2.find('.pattern-option img').each((idx, img) => {
+        const i = idx + 1;
+        img.src = (gender === 'female')
+            ? `/assets/img/w${i}.png`
+            : `/assets/img/ol${i}.png`;
+        });
+
+        // ۳) صبر برای لود همه تصاویر
+        const imgs = $step2.find('.pattern-option img').toArray();
+        Promise.all(imgs.map(img => new Promise(resolve => {
+        if (img.complete) resolve();
+        else img.onload = resolve;
+        }))).then(() => {
+        // ۴) وقتی آماده شد: مخفی کردن لودر، نمایش محتوا
+        $loader.hide();
+        $content.show();
+        updateProgress(2);
+        localStorage.setItem('currentStep', 2);
+        });
+
+        return;
+    }
 
         if (step === 6) {
             localStorage.removeItem('currentStep');
@@ -147,7 +204,7 @@ $(document).ready(function () {
 
         const gender = $('input[name="gender"]:checked').val();
         if (!gender) {
-            alert('لطفاً جنسیت را انتخاب کنید');
+            toastr.error('لطفاً جنسیت را انتخاب کنید');
             return;
         }
 
@@ -157,13 +214,11 @@ $(document).ready(function () {
                 localStorage.setItem('userId', userId);
                 localStorage.setItem('gender', gender);
 
-                // تغییر عکس‌های مراحل بعد
-                updateLossPatternImages(gender);
-                updateUploadDescriptionImages(gender);
+                initializeStep2PatternImages(gender);
 
                 goToStep(2);
             } else {
-                alert(response.message || 'خطا در ارسال اطلاعات');
+                toastr.error(response.message || 'خطا در ارسال اطلاعات');
             }
         }, 'json');
     });
@@ -177,7 +232,7 @@ $(document).ready(function () {
             if (response.success) {
                 goToStep(3);
             } else {
-                alert(response.message || 'خطا در مرحله ۲');
+                toastr.error(response.message || 'خطا در مرحله ۲');
             }
         }, 'json');
     });
@@ -246,7 +301,7 @@ $(document).ready(function () {
                     uploads[fileInput.name] = url;
                     localStorage.setItem('uploadedPics', JSON.stringify(uploads));
                 } else {
-                    alert(res.message || 'خطا در آپلود');
+                    toastr.error(res.message || 'خطا در آپلود');
                 }
             }
         });
@@ -273,7 +328,7 @@ $(document).ready(function () {
             if (response.success) {
                 goToStep(5);
             } else {
-                alert(response.message || 'خطا در مرحله ۴');
+                toastr.error(response.message || 'خطا در مرحله ۴');
             }
         }, 'json');
     });
@@ -283,7 +338,7 @@ $(document).ready(function () {
         e.preventDefault();
         let userId = localStorage.getItem('userId');
         if (!userId) {
-            alert('کاربر شناسایی نشد، لطفاً دوباره مراحل را شروع کنید');
+            toastr.error('کاربر شناسایی نشد، لطفاً دوباره مراحل را شروع کنید');
             return;
         }
 

@@ -292,7 +292,14 @@ select{
             object-fit: contain;
             transition: filter 0.3s ease;
         }
-                
+        .pattern-option img {
+          filter: grayscale(100%);
+          transition: filter 0.2s ease;
+        }
+        .pattern-option.selected img {
+          filter: none;
+        }
+                        
     }
 
     #step-3{

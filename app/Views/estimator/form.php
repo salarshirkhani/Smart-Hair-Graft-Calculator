@@ -7,7 +7,7 @@
     <div id="step-container">
 
         <div class="container">
-        <!-- Step 0: قوانین -->
+        <!-- Step 0: Rules -->
         <div id="step-0" class="step active">
             <div class="header-box">&nbsp;</div>
             <h3>ابزار هوشمند محاسبه تعداد تار مو برای کاشت</h3>
@@ -23,7 +23,7 @@
         <div id="step-1" class="step d-none">
         <form id="form-step-1" class="text-center">
 
-            <!-- انتخاب جنسیت -->
+            <!-- Gender Selection -->
             <div class="mb-4">
                 <label class="d-block mb-2 fw-bold ">جنسیت خود را انتخاب کنید <span class="text-danger">*</span></label>
                 <div class="g-box d-flex justify-content-center gap-3">
@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <!-- بازه سنی -->
+            <!-- Age -->
             <div class="mb-4">
                 <label class="d-block mb-2 fw-bold ">بازه سنی خود را انتخاب کنید 
                 <span class="text-danger">*</span></label>
@@ -113,6 +113,11 @@
     </div>
         <!-- Step 2: extent of hair loss -->
         <div id="step-2" class="step d-none">
+
+            <div id="step2-loader" class="loader-overlay">
+                <div class="spinner"></div>
+            </div>
+            
             <label class="d-block mb-2 fw-bold ">الگوی ریزش موی خود را انتخاب کنید</label>
             <form id="form-step-2">
                 <div class="row g-4">
@@ -138,7 +143,7 @@
             </form>
         </div>
 
-        <!-- Step 3: آپلود عکس‌ها -->
+        <!-- Step 3: Upload-->
         <div id="step-3" class="step d-none">
             <div class="container-image">
                 <label class="d-block mb-2 fw-bold ">لطفاً عکس‌هایی از موی سر خود، از زوایای مشخص‌شده بارگذاری کنید. (اختیاری)</label>
@@ -156,7 +161,6 @@
             </div>
             <form id="form-step-3" enctype="multipart/form-data">
                 <div class="row g-3" id="upload-zones">
-                <!-- باکس‌ها با JS ساخته می‌شن بر اساس gender -->
                 </div>
                 <div class="mt-4 d-flex justify-content-between">
                     <button type="button" class="btn btn-secondary btn-prev">مرحله قبل</button>
@@ -240,7 +244,7 @@
             </form>
         </div>
 
-        <!-- Step 5: اطلاعات نهایی -->
+        <!-- Step 5: fINAL-->
         <div id="step-5" class="step d-none">
             <form id="form-step-5">
                 <div class="container">
@@ -280,7 +284,7 @@
             </form>
         </div>
 
-        <!-- Step 6: نمایش نتیجه -->
+        <!-- Step 6: Result -->
         <div id="step-6" class="step d-none">
             <h3>نتیجه مشاوره</h3>
             <div id="ai-result-box" class="result-box"></div>
