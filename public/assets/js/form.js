@@ -10,19 +10,76 @@ $(document).ready(function () {
         female: ['روبرو', 'بالای سر', 'فرق سر']
     };
 
-    // ======== هدایت به مرحله مشخص ========
+    // ==================== تغییر عکس‌های الگوی ریزش مو (Step 2) ====================
+    function updateLossPatternImages(gender) {
+        $('#form-step-2 .pattern-option img').each(function (index) {
+            const i = index + 1;
+            if (gender === 'female') {
+                $(this).attr('src', `/assets/img/wg${i}.png`);
+                $(this).attr('data-colored', `/assets/img/w${i}.png`);
+                $(this).attr('data-gray', `/assets/img/wg${i}.png`);
+            } else {
+                $(this).attr('src', `/assets/img/${i}.webp`);
+                $(this).attr('data-colored', `/assets/img/ol${i}.png`);
+                $(this).attr('data-gray', `/assets/img/${i}.webp`);
+            }
+        });
+
+        // ❗ بعد از آپدیت عکس‌ها، انتخاب قبلی رو ریست کن
+        $('input[name="loss_pattern"]').prop('checked', false);
+        $('.pattern-option').removeClass('selected');
+    }
+
+
+    // ==================== تغییر عکس‌های توضیحی آپلود (Step 3) ====================
+    function updateUploadDescriptionImages(gender) {
+        const images = {
+            male: [
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/New-Project-80.webp',
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/2-pic-1.webp',
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/3-pic-1.webp',
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/1-pic-1.webp'
+            ],
+            female: [
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/top_f.webp',
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/back_f.webp',
+                'https://fakhraei.clinic/wp-content/uploads/2025/07/front_f.webp'
+            ]
+        };
+
+        const $angleImages = $('.angles .angle img');
+        const imgList = images[gender];
+
+        $angleImages.each(function (index) {
+            if (imgList[index]) {
+                $(this).attr('src', imgList[index]).parent().show();
+            } else {
+                $(this).parent().hide(); // مخفی کردن عکس چهارم
+            }
+        });
+
+        // برای وسط چین کردن سه‌تایی
+        $('.angles').css({
+            'display': 'flex',
+            'justify-content': gender === 'female' ? 'center' : 'space-between',
+            'gap': '12px'
+        });
+    }
+
+
+    // ==================== هدایت به مرحله مشخص ====================
     function goToStep(step) {
         $('.step').addClass('d-none').removeClass('active');
         $('#step-' + step).removeClass('d-none').addClass('active');
         updateProgress(step);
         localStorage.setItem('currentStep', step);
 
-        // مرحله آپلود → رندر باکس‌ها
         if (step === 3) {
-            const gender = localStorage.getItem('gender');
+            const gender = localStorage.getItem('gender') || 'male';
             if (gender) {
                 renderUploadBoxes(gender);
                 loadUploadedThumbnails();
+                updateUploadDescriptionImages(gender);
             } else {
                 alert('جنسیت مشخص نیست. لطفاً مرحله ۱ را کامل کنید.');
                 goToStep(1);
@@ -30,7 +87,6 @@ $(document).ready(function () {
         }
 
         if (step === 6) {
-            // وقتی به نتیجه رسیدیم → پاک‌سازی مرحله ذخیره‌شده
             localStorage.removeItem('currentStep');
         }
     }
@@ -89,7 +145,6 @@ $(document).ready(function () {
     $('#form-step-1').on('submit', function (e) {
         e.preventDefault();
 
-        // گرفتن gender از radio
         const gender = $('input[name="gender"]:checked').val();
         if (!gender) {
             alert('لطفاً جنسیت را انتخاب کنید');
@@ -101,6 +156,11 @@ $(document).ready(function () {
                 userId = response.user_id;
                 localStorage.setItem('userId', userId);
                 localStorage.setItem('gender', gender);
+
+                // تغییر عکس‌های مراحل بعد
+                updateLossPatternImages(gender);
+                updateUploadDescriptionImages(gender);
+
                 goToStep(2);
             } else {
                 alert(response.message || 'خطا در ارسال اطلاعات');
@@ -122,7 +182,6 @@ $(document).ready(function () {
         }, 'json');
     });
 
-    // ذخیره pattern انتخاب‌شده
     $(document).on('change', 'input[name="loss_pattern"]', function () {
         $('.pattern-option').removeClass('selected').find('.pattern-img').each(function () {
             $(this).attr('src', $(this).data('gray'));
@@ -141,7 +200,6 @@ $(document).ready(function () {
         goToStep(4);
     });
 
-    // آپلود فایل
     $(document).on('change', '.upload-box input[type="file"]', function () {
         const fileInput = this;
         const file = fileInput.files[0];
@@ -176,22 +234,14 @@ $(document).ready(function () {
                 }, false);
                 return xhr;
             },
-
             success: function (res) {
                 if (res.success) {
                     const url = res.file;
-
-                    // نمایش thumbnail
                     $thumb.attr('src', url).removeClass('d-none');
-
-                    // مخفی کردن progress
                     $progress.addClass('d-none');
                     $bar.css('width', '0%');
-
-                    // افزودن کلاس موفقیت
                     $box.addClass('upload-success');
 
-                    // ذخیره مسیر تو localStorage
                     const uploads = JSON.parse(localStorage.getItem('uploadedPics') || '{}');
                     uploads[fileInput.name] = url;
                     localStorage.setItem('uploadedPics', JSON.stringify(uploads));
@@ -199,36 +249,19 @@ $(document).ready(function () {
                     alert(res.message || 'خطا در آپلود');
                 }
             }
-
         });
     });
 
     // ======== مرحله ۴: سوالات پزشکی ========
-    $('input[name="has_medical"]').change(function () {
-        $('#medical-fields').toggleClass('d-none', $(this).val() !== 'yes');
-    });
-
-    $('input[name="has_meds"]').change(function () {
-        $('#meds-fields').toggleClass('d-none', $(this).val() !== 'yes');
-    });
-
     $(document).on('change', 'input[name="has_medical"]', function () {
-    // حذف کلاس active از همه
-    $('input[name="has_medical"]').parent().removeClass('active');
-    // اضافه کردن به گزینه انتخاب‌شده
-    if ($(this).is(':checked')) {
-        $(this).parent().addClass('active');
-    }
-
-    $('#medical-fields').toggleClass('d-none', $(this).val() !== 'yes');
+        $('input[name="has_medical"]').parent().removeClass('active');
+        if ($(this).is(':checked')) $(this).parent().addClass('active');
+        $('#medical-fields').toggleClass('d-none', $(this).val() !== 'yes');
     });
 
     $(document).on('change', 'input[name="has_meds"]', function () {
         $('input[name="has_meds"]').parent().removeClass('active');
-        if ($(this).is(':checked')) {
-            $(this).parent().addClass('active');
-        }
-
+        if ($(this).is(':checked')) $(this).parent().addClass('active');
         $('#meds-fields').toggleClass('d-none', $(this).val() !== 'yes');
     });
 
@@ -246,68 +279,58 @@ $(document).ready(function () {
     });
 
     // ======== مرحله ۵: اطلاعات تماس ========
-    console.log("Binding form-step-5");
     $(document).on('submit', '#form-step-5', function (e) {
-    e.preventDefault();
-    console.log("Step 5 submitted ✅");
-
-    let userId = localStorage.getItem('userId'); // ← اضافه شد
-    if (!userId) {
-        alert('کاربر شناسایی نشد، لطفاً دوباره مراحل را شروع کنید');
-        return;
-    }
-
-    let data = $(this).serialize() + '&user_id=' + userId;
-
-    $.post('/step5', data, function (response) {
-        console.log("DEBUG /step5:", response); 
-        if (response.success) {
-            let method = '';
-            let graftCount = '';
-            let analysis = '';
-            let isJson = false;
-
-            try {
-                const parsed = JSON.parse(response.ai_result);
-                method = parsed.method || 'FIT';
-                graftCount = parsed.graft_count || '';
-                analysis = parsed.analysis || '';
-                isJson = true;
-            } catch (e) {
-                // fallback اگر JSON نبود
-                analysis = response.ai_result;
-                method = 'FIT';
-            }
-
-            $('#ai-result-box').html(`
-                <div class="ai-result-container">
-                    <h4>روش پیشنهادی: <span class="method-text">${method}</span></h4>
-                    <p class="analysis-text">${analysis}</p>
-                    ${graftCount ? `
-                        <div class="graft-count-box">
-                            <strong>تخمین تعداد گرافت:</strong> ${graftCount} گرافت
-                        </div>` : ''}
-                </div>
-            `);
-
-            let summary = `
-                <li><strong>نام:</strong> ${response.user.first_name} ${response.user.last_name}</li>
-                <li><strong>جنسیت:</strong> ${response.user.gender}</li>
-                <li><strong>سن:</strong> ${response.user.age}</li>
-                <li><strong>شهر:</strong> ${response.user.city}, ${response.user.state}</li>
-            `;
-            $('#user-summary-list').html(summary);
-
-            goToStep(6);
-        } else {
-            alert(response.message);
+        e.preventDefault();
+        let userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert('کاربر شناسایی نشد، لطفاً دوباره مراحل را شروع کنید');
+            return;
         }
-    }, 'json');
 
-});
+        let data = $(this).serialize() + '&user_id=' + userId;
+        $.post('/step5', data, function (response) {
+            if (response.success) {
+                let method = '';
+                let graftCount = '';
+                let analysis = '';
 
+                try {
+                    const parsed = JSON.parse(response.ai_result);
+                    method = parsed.method || 'FIT';
+                    graftCount = parsed.graft_count || '';
+                    analysis = parsed.analysis || '';
+                } catch (e) {
+                    analysis = response.ai_result;
+                    method = 'FIT';
+                }
 
-    // ======== دانلود PDF و ریست فرم ========
+                $('#ai-result-box').html(`
+                    <div class="ai-result-container">
+                        <h4>روش پیشنهادی: <span class="method-text">${method}</span></h4>
+                        <p class="analysis-text">${analysis}</p>
+                        ${graftCount ? `
+                            <div class="graft-count-box">
+                                <strong>تخمین تعداد گرافت:</strong> ${graftCount} گرافت
+                            </div>` : ''}
+                    </div>
+                `);
+
+                let summary = `
+                    <li><strong>نام:</strong> ${response.user.first_name} ${response.user.last_name}</li>
+                    <li><strong>جنسیت:</strong> ${response.user.gender}</li>
+                    <li><strong>سن:</strong> ${response.user.age}</li>
+                    <li><strong>شهر:</strong> ${response.user.city}, ${response.user.state}</li>
+                `;
+                $('#user-summary-list').html(summary);
+
+                goToStep(6);
+            } else {
+                alert(response.message);
+            }
+        }, 'json');
+    });
+
+    // ======== دانلود PDF ========
     $('#download-pdf').click(function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
@@ -332,10 +355,14 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '#reset-form', function () {
-            if (confirm('آیا مطمئن هستید که می‌خواهید فرم را از ابتدا شروع کنید؟')) {
-                localStorage.clear(); 
-                window.location.reload(); 
-            }
+        if (confirm('آیا مطمئن هستید که می‌خواهید فرم را از ابتدا شروع کنید؟')) {
+            localStorage.clear();
+            window.location.reload();
+        }
     });
 
+    // ==================== اجرا در زمان لود صفحه ====================
+    const savedGender = localStorage.getItem('gender') || 'male';
+    updateLossPatternImages(savedGender);
+    updateUploadDescriptionImages(savedGender);
 });

@@ -535,7 +535,6 @@ select{
     padding: 10px;
     background-color: #ffffff !important;
     outline: none !important;
-
     max-width: 95%;
     padding: 10px;
 
@@ -575,10 +574,12 @@ select{
     #step-3 {
       .angles {
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
 
         .angle {
-          width: 48%;
+          width: 100%;
         }
       }
 
@@ -661,9 +662,11 @@ select{
       .angles {
         flex-wrap: wrap;
         gap: 8px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
 
         .angle {
-          width: 48%;
+          width: 100%;
         }
       }
 

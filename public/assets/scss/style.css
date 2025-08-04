@@ -12493,10 +12493,12 @@ select:focus {
   }
   #step-container #step-3 .angles {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
   }
   #step-container #step-3 .angles .angle {
-    width: 48%;
+    width: 100%;
   }
   #step-container #step-3 #upload-zones .col-6,
   #step-container #step-3 #upload-zones .col-md-3 {
@@ -12556,9 +12558,11 @@ select:focus {
   #step-container #step-3 .angles {
     flex-wrap: wrap;
     gap: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
   }
   #step-container #step-3 .angles .angle {
-    width: 48%;
+    width: 100%;
   }
   #step-container #step-3 #upload-zones .col-6,
   #step-container #step-3 #upload-zones .col-md-3 {
