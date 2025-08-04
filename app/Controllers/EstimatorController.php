@@ -110,26 +110,29 @@ class EstimatorController extends Controller {
 
         $userId = $_POST['user_id'] ?? '';
         if (!$userId) {
-            echo json_encode(['success' => false, 'message' => 'User ID لا زم است']);
+            echo json_encode(['success' => false, 'message' => 'User ID لازم است']);
             return;
         }
 
         $metaModel = new UserMeta();
         $metaModel->addMeta($userId, 'concern', $_POST['concern'] ?? '', 'data');
 
-        $metaModel->addMeta($userId, 'has_medical', $_POST['has_medical'] ?? 'no', 'data');
-        if ($_POST['has_medical'] === 'yes') {
+        $hasMedical = $_POST['has_medical'] ?? 'no';
+        $metaModel->addMeta($userId, 'has_medical', $hasMedical, 'data');
+        if ($hasMedical === 'yes') {
             $metaModel->addMeta($userId, 'scalp_conditions', $_POST['scalp_conditions'] ?? '', 'data');
             $metaModel->addMeta($userId, 'other_conditions', $_POST['other_conditions'] ?? '', 'data');
         }
 
-        $metaModel->addMeta($userId, 'has_meds', $_POST['has_meds'] ?? 'no', 'data');
-        if ($_POST['has_meds'] === 'yes') {
+        $hasMeds = $_POST['has_meds'] ?? 'no';
+        $metaModel->addMeta($userId, 'has_meds', $hasMeds, 'data');
+        if ($hasMeds === 'yes') {
             $metaModel->addMeta($userId, 'meds_list', $_POST['meds_list'] ?? '', 'data');
         }
 
         echo json_encode(['success' => true]);
     }
+
 
     // --- Step 5: Final info + AI Diagnosis ---
     public function handleStep5() {

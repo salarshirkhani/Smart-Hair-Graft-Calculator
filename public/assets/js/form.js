@@ -220,11 +220,9 @@ $(document).ready(function () {
         $(this).parent().addClass('active');
     }
 
-    // نمایش/مخفی کردن فیلدهای بیماری
     $('#medical-fields').toggleClass('d-none', $(this).val() !== 'yes');
     });
 
-    // تغییر استایل دکمه‌های رادیو برای مصرف دارو
     $(document).on('change', 'input[name="has_meds"]', function () {
         $('input[name="has_meds"]').parent().removeClass('active');
         if ($(this).is(':checked')) {
@@ -249,7 +247,7 @@ $(document).ready(function () {
 
     // ======== مرحله ۵: اطلاعات تماس ========
     console.log("Binding form-step-5");
-$(document).on('submit', '#form-step-5', function (e) {
+    $(document).on('submit', '#form-step-5', function (e) {
     e.preventDefault();
     console.log("Step 5 submitted ✅");
 
@@ -335,8 +333,8 @@ $(document).on('submit', '#form-step-5', function (e) {
 
     $(document).on('click', '#reset-form', function () {
             if (confirm('آیا مطمئن هستید که می‌خواهید فرم را از ابتدا شروع کنید؟')) {
-                localStorage.clear(); // پاک کردن همه داده‌های ذخیره‌شده
-                window.location.reload(); // رفرش به Step 0
+                localStorage.clear(); 
+                window.location.reload(); 
             }
     });
 

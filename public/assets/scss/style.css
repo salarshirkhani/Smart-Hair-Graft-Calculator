@@ -12023,7 +12023,19 @@ body {
 }
 
 select {
-  background-color: #dadbdd;
+  background-color: #ffffff !important;
+  border: 1px solid #ccc !important;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 15px;
+  color: #333;
+  transition: all 0.3s ease;
+}
+select:focus {
+  background-color: #ffffff !important;
+  border-color: #ff6600 !important;
+  outline: none;
+  box-shadow: 0 0 5px rgba(255, 102, 0, 0.4);
 }
 
 .btn-prev {
@@ -12126,7 +12138,6 @@ select {
 }
 #step-container #step-1 .g-box {
   margin: 31px auto;
-  justify-content: space-between !important;
   margin-bottom: 65px;
   padding: 20px 50px 50px 50px !important;
   border-bottom: 1px solid #CDCFCE;
@@ -12446,24 +12457,23 @@ select {
   color: #333;
 }
 
-#step-container {
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1294117647);
-  margin: 0 auto;
-  padding: 10px;
-  background-color: #ffffff !important;
-  outline: none !important;
-  max-width: 700px;
-}
 @media (max-width: 768px) {
   #step-container {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1294117647);
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #ffffff !important;
+    outline: none !important;
     max-width: 95%;
     padding: 10px;
   }
   #step-container #step-1 .g-box,
   #step-container #step-1 .a-box {
-    flex-wrap: wrap;
-    justify-content: center !important;
+    display: grid !important;
+    gap: 10px;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     padding: 0 !important;
   }
@@ -12513,13 +12523,22 @@ select {
 }
 @media (max-width: 576px) {
   #step-container {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1294117647);
+    margin: 0 auto;
+    padding: 10px;
+    background-color: #ffffff !important;
+    outline: none !important;
     max-width: 100%;
     padding: 8px;
   }
   #step-container #step-1 .g-box,
   #step-container #step-1 .a-box {
-    flex-direction: column !important;
-    align-items: stretch !important;
+    display: grid !important;
+    gap: 10px;
+    align-items: center;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: space-between;
     gap: 10px !important;
     margin: 20px 0 !important;
     padding: 0 !important;
