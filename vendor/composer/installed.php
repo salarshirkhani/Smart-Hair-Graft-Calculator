@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'tec/estimator',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '5421e46a1b8963c971c6f136969304ef460da695',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'ee844685f73d515723cee50be701dd17b1a2f615',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -119,8 +119,8 @@
         'psr/http-factory-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '*',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/http-message' => array(
@@ -135,8 +135,8 @@
         'psr/http-message-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0',
-                1 => '*',
+                0 => '*',
+                1 => '1.0',
             ),
         ),
         'psr/log' => array(
@@ -218,9 +218,9 @@
             'dev_requirement' => false,
         ),
         'tec/estimator' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '5421e46a1b8963c971c6f136969304ef460da695',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'ee844685f73d515723cee50be701dd17b1a2f615',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
