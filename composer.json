@@ -2,12 +2,10 @@
     "name": "tec/estimator",
     "autoload": {
         "psr-4": {
-        "App\\": "app/",
-        "Core\\": "app/Core/"
-        },
-        "exclude-from-classmap": [
-        "vendor/symfony/polyfill-php80/Resources/stubs"
-        ]
+            "App\\": "app/",
+            "Core\\": "core/",
+            "Config\\": "config/"
+        }
     },
 
     "authors": [
